@@ -1,0 +1,14 @@
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\bin\Debug\net8.0\ReplaceTags.exe
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\bin\Debug\net8.0\ReplaceTags.deps.json
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\bin\Debug\net8.0\ReplaceTags.runtimeconfig.json
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\bin\Debug\net8.0\ReplaceTags.dll
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\bin\Debug\net8.0\ReplaceTags.pdb
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ReplaceTags.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ReplaceTags.AssemblyInfoInputs.cache
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ReplaceTags.AssemblyInfo.cs
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ReplaceTags.csproj.CoreCompileInputs.cache
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ReplaceTags.dll
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\refint\ReplaceTags.dll
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ReplaceTags.pdb
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ReplaceTags.genruntimeconfig.cache
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ref\ReplaceTags.dll
