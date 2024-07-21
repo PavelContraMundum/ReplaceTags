@@ -12,3 +12,4 @@ D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\refint\ReplaceTag
 D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ReplaceTags.pdb
 D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ReplaceTags.genruntimeconfig.cache
 D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ref\ReplaceTags.dll
+D:\Programming\CSharp\ReplaceTags\ReplaceTags\obj\Debug\net8.0\ReplaceTags.sourcelink.json
