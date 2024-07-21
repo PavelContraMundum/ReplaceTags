@@ -10,8 +10,11 @@ class Program
         // Registrace poskytovatelů kódování
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-        string inputFilePath = @"D:\Downloads\GenModified.txt";
-        string outputFilePath = @"D:\Downloads\GenModifiedFormatted.txt";
+      //  string inputFilePath = @"D:\Downloads\GenModified.txt";
+       // string outputFilePath = @"D:\Downloads\GenModifiedFormatted.txt";
+
+        string inputFilePath = GetFilePath("Zadejte cestu k vstupnímu souboru: ");
+        string outputFilePath = GetFilePath("Zadejte cestu k výslednému souboru: ");
 
         try
         {
@@ -37,6 +40,12 @@ class Program
         {
             Console.WriteLine($"Došlo k chybě: {ex.Message}");
         }
+    }
+
+    private static string GetFilePath(string prompt)
+    {
+        Console.Write(prompt);
+        return Console.ReadLine().Trim();
     }
 
     // Metoda pro detekci kódování souboru
