@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ReplaceTags")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f8ccffe350b2c81f78585a8a9784bf7c016b47a4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7eadf36408ee5e43c1cda58ed34b7328c6cc24fd")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReplaceTags")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReplaceTags")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

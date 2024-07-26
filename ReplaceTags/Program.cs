@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
+using System.Collections.Generic;
 
 class Program
 {
@@ -13,28 +15,7 @@ class Program
 
         try
         {
-            // Zkusíme různá kódování
-            Encoding[] encodingsToTry = new Encoding[]
-            {
-                Encoding.GetEncoding(1250),  // Windows-1250
-                Encoding.GetEncoding(28592), // ISO-8859-2
-                Encoding.GetEncoding(852),   // CP852
-                Encoding.UTF8,
-                Encoding.GetEncoding(1252)   // Windows-1252
-            };
-
-            string content = null;
-            Encoding detectedEncoding = null;
-
-            foreach (var encoding in encodingsToTry)
-            {
-                content = File.ReadAllText(inputFilePath, encoding);
-                if (content.Contains("Výčet Jákobových synů"))
-                {
-                    detectedEncoding = encoding;
-                    break;
-                }
-            }
+            Encoding detectedEncoding = DetectEncoding(inputFilePath);
 
             if (detectedEncoding == null)
             {
@@ -43,6 +24,8 @@ class Program
             }
 
             Console.WriteLine($"Detekované kódování: {detectedEncoding.EncodingName}");
+
+            string content = File.ReadAllText(inputFilePath, detectedEncoding);
 
             // Úpravy obsahu
             content = Regex.Replace(content, "<italic>", "\\it");
@@ -56,7 +39,7 @@ class Program
             File.WriteAllText(outputFilePath, content, new UTF8Encoding(false));
             Console.WriteLine($"Úpravy byly úspěšně provedeny. Výstup byl uložen do: {outputFilePath} v kódování UTF-8");
 
-            // Kontrolní vypís části obsahu
+            // Pro kontrolu vypíšeme část obsahu
             Console.WriteLine("Prvních 100 znaků výstupního souboru:");
             Console.WriteLine(content.Substring(0, Math.Min(100, content.Length)));
         }
@@ -70,5 +53,44 @@ class Program
     {
         Console.Write(prompt);
         return Console.ReadLine().Trim();
+    }
+
+    private static Encoding DetectEncoding(string filePath)
+    {
+        Encoding[] encodingsToTry = new Encoding[]
+        {
+            Encoding.UTF8,
+            Encoding.GetEncoding(1250),  // Windows-1250
+            Encoding.GetEncoding(28592), // ISO-8859-2
+            Encoding.GetEncoding(852),   // CP852
+            Encoding.GetEncoding(1252)   // Windows-1252
+        };
+
+        string czechChars = "ěščřžýáíéůúňťďóĚŠČŘŽÝÁÍÉŮÚŇŤĎÓ";
+
+        foreach (var encoding in encodingsToTry)
+        {
+            try
+            {
+                string content = File.ReadAllText(filePath, encoding);
+
+                // Kontrola platnosti českých znaků
+                int czechCharCount = content.Count(c => czechChars.Contains(c));
+                double czechCharRatio = (double)czechCharCount / content.Length;
+
+                // Pokud je dostatek českých znaků, považujeme kódování za správné
+                if (czechCharRatio > 0.01) // 1% českých znaků
+                {
+                    return encoding;
+                }
+            }
+            catch (Exception)
+            {
+                // Pokud se nepodaří přečíst soubor s daným kódováním, pokračujeme na další
+                continue;
+            }
+        }
+
+        return null;
     }
 }
