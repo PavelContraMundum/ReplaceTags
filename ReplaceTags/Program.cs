@@ -7,7 +7,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Registrace poskytovatelů kódování
+        
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
       //  string inputFilePath = @"D:\Downloads\GenModified.txt";
@@ -48,10 +48,10 @@ class Program
         return Console.ReadLine().Trim();
     }
 
-    // Metoda pro detekci kódování souboru
+    
     private static Encoding DetectFileEncoding(string filePath)
     {
-        // Čtení prvních několika bytů souboru pro detekci BOM
+       
         using (var reader = new FileStream(filePath, FileMode.Open, FileAccess.Read))
         {
             var bom = new byte[4];
@@ -69,7 +69,7 @@ class Program
             if (bom[0] == 0xFE && bom[1] == 0xFF)
                 return Encoding.BigEndianUnicode;
 
-            // Pokud není BOM, pokusíme se o heuristickou detekci
+            // Pokud není BOM, zkouška heuristické detekci
             return DetectEncodingHeuristic(filePath);
         }
     }
@@ -77,9 +77,7 @@ class Program
     // Heuristická detekce kódování
     private static Encoding DetectEncodingHeuristic(string filePath)
     {
-        // Pokud není BOM, můžeme se pokusit o heuristickou detekci kódování
-        // Zde přidáme logiku, která zkontroluje obsah souboru
-        // Můžete přidat další detekce dle potřeby
+        
         using (var reader = new StreamReader(filePath, Encoding.Default, detectEncodingFromByteOrderMarks: false))
         {
             // Zjednodušená heuristika, kontrola obsahuje-li text v CP1250 nebo UTF-8
