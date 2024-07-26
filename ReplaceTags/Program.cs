@@ -7,22 +7,42 @@ class Program
 {
     static void Main(string[] args)
     {
-        
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-      //  string inputFilePath = @"D:\Downloads\GenModified.txt";
-       // string outputFilePath = @"D:\Downloads\GenModifiedFormatted.txt";
-
         string inputFilePath = GetFilePath("Zadejte cestu k vstupnímu souboru: ");
         string outputFilePath = GetFilePath("Zadejte cestu k výslednému souboru: ");
 
         try
         {
-            // Detekce kódování souboru
-            Encoding encoding = DetectFileEncoding(inputFilePath);
+            // Zkusíme různá kódování
+            Encoding[] encodingsToTry = new Encoding[]
+            {
+                Encoding.GetEncoding(1250),  // Windows-1250
+                Encoding.GetEncoding(28592), // ISO-8859-2
+                Encoding.GetEncoding(852),   // CP852
+                Encoding.UTF8,
+                Encoding.GetEncoding(1252)   // Windows-1252
+            };
 
-            // Čtení souboru s detekovaným kódováním
-            string content = File.ReadAllText(inputFilePath, encoding);
+            string content = null;
+            Encoding detectedEncoding = null;
+
+            foreach (var encoding in encodingsToTry)
+            {
+                content = File.ReadAllText(inputFilePath, encoding);
+                if (content.Contains("Výčet Jákobových synů"))
+                {
+                    detectedEncoding = encoding;
+                    break;
+                }
+            }
+
+            if (detectedEncoding == null)
+            {
+                Console.WriteLine("Nepodařilo se detekovat správné kódování. Zkontrolujte vstupní soubor.");
+                return;
+            }
+
+            Console.WriteLine($"Detekované kódování: {detectedEncoding.EncodingName}");
 
             // Úpravy obsahu
             content = Regex.Replace(content, "<italic>", "\\it");
@@ -30,11 +50,15 @@ class Program
             content = Regex.Replace(content, "<p/>", "\\p");
             content = Regex.Replace(content, "<kap/>", "\\cl_");
             content = Regex.Replace(content, @"<vers n=""(\d+)""/>", @"\v_$1_");
+            content = Regex.Replace(content, @"<kap n=""(\d+)""/>", @"\cl_$1");
 
-            // Zápis souboru se stejným kódováním
-            File.WriteAllText(outputFilePath, content, encoding);
+            // Zápis souboru v UTF-8 bez BOM
+            File.WriteAllText(outputFilePath, content, new UTF8Encoding(false));
+            Console.WriteLine($"Úpravy byly úspěšně provedeny. Výstup byl uložen do: {outputFilePath} v kódování UTF-8");
 
-            Console.WriteLine($"Úpravy byly úspěšně provedeny. Výstup byl uložen do: {outputFilePath}");
+            // Kontrolní vypís části obsahu
+            Console.WriteLine("Prvních 100 znaků výstupního souboru:");
+            Console.WriteLine(content.Substring(0, Math.Min(100, content.Length)));
         }
         catch (Exception ex)
         {
@@ -46,46 +70,5 @@ class Program
     {
         Console.Write(prompt);
         return Console.ReadLine().Trim();
-    }
-
-    
-    private static Encoding DetectFileEncoding(string filePath)
-    {
-       
-        using (var reader = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-        {
-            var bom = new byte[4];
-            reader.Read(bom, 0, 4);
-
-            // UTF-8 BOM
-            if (bom[0] == 0xEF && bom[1] == 0xBB && bom[2] == 0xBF)
-                return Encoding.UTF8;
-
-            // UTF-16 LE BOM
-            if (bom[0] == 0xFF && bom[1] == 0xFE)
-                return Encoding.Unicode;
-
-            // UTF-16 BE BOM
-            if (bom[0] == 0xFE && bom[1] == 0xFF)
-                return Encoding.BigEndianUnicode;
-
-            // Pokud není BOM, zkouška heuristické detekci
-            return DetectEncodingHeuristic(filePath);
-        }
-    }
-
-    // Heuristická detekce kódování
-    private static Encoding DetectEncodingHeuristic(string filePath)
-    {
-        
-        using (var reader = new StreamReader(filePath, Encoding.Default, detectEncodingFromByteOrderMarks: false))
-        {
-            // Zjednodušená heuristika, kontrola obsahuje-li text v CP1250 nebo UTF-8
-            string firstLine = reader.ReadLine();
-            if (firstLine != null && firstLine.Contains("some UTF-8 specific pattern"))
-                return Encoding.UTF8;
-
-            return Encoding.GetEncoding(1250); // Defaultně vrátí CP1250
-        }
     }
 }
